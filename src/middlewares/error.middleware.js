@@ -10,4 +10,13 @@
  */
 export function errorHandler(err, req, res, next) {
   // Your code here
+  console.error(err);
+  if (err.name === "ValidationError") {
+    const messages = Object.values(err.errors).map((e) => e.message);
+    return res.status(400).json({ error: { message: messages.join(", ") } });
+  }
+  if (err.name === "CastError") {
+    return res.status(400).json({ error: { message: "Invalid id format" } });
+  }
+  
 }
